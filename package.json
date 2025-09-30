@@ -1,0 +1,20 @@
+{
+  "name": "nhac-nhac-ia",
+  "version": "1.0.0",
+  "description": "IA para o jogo Nhac Nhac com Negamax e Poda Alfa-Beta",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "ts-node src/main.ts"
+  },
+  "author": "Bernardo Kirsch",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.9",
+    "@types/readline-sync": "^1.4.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
