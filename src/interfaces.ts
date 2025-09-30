@@ -1,6 +1,6 @@
 export enum Player {
-    Orange = 'Orange',
-    Blue = 'Blue',
+    Laranja = 'Laranja',
+    Azul = 'Azul',
 }
 
 export enum PieceSize {
@@ -17,7 +17,7 @@ export interface Piece {
 export type Square = Piece[];
 
 export interface Move {
-    type: 'place' | 'move'; //place coloca a peça no tabuleiro, move move uma peça
+    type: 'colocar' | 'mover'; 
     piece: Piece;
     to: { row: number; col: number };
     from?: { row: number; col: number };

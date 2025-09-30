@@ -9,8 +9,8 @@ export class Board {
             .fill(null)
             .map(() => Array(3).fill(null).map(() => []));
         this.offBoardPieces = {
-            [Player.Orange]: this.createPlayerPieces(Player.Orange),
-            [Player.Blue]: this.createPlayerPieces(Player.Blue),
+            [Player.Laranja]: this.createPlayerPieces(Player.Laranja),
+            [Player.Azul]: this.createPlayerPieces(Player.Azul),
         };
     }
 
@@ -39,7 +39,7 @@ export class Board {
                 for (let c = 0; c < 3; c++) {
                     const topPiece = this.getTopPiece(r, c);
                     if (!topPiece || piece.size > topPiece.size) {
-                        moves.push({ type: 'place', piece, to: { row: r, col: c } });
+                        moves.push({ type: 'colocar', piece, to: { row: r, col: c } });
                     }
                 }
             }
@@ -56,7 +56,7 @@ export class Board {
                             const targetTopPiece = this.getTopPiece(tr, tc);
                             if (!targetTopPiece || topPiece.size > targetTopPiece.size) {
                                 moves.push({
-                                    type: 'move',
+                                    type: 'mover',
                                     piece: topPiece,
                                     from: { row: r, col: c },
                                     to: { row: tr, col: tc },
@@ -74,7 +74,7 @@ export class Board {
         const newBoard = this.clone();
         const player = move.piece.owner;
 
-        if (move.type === 'place') {
+        if (move.type === 'colocar') {
             const pieceIndex = newBoard.offBoardPieces[player].findIndex(
                 (p) => p.size === move.piece.size
             );
@@ -82,7 +82,7 @@ export class Board {
                 newBoard.offBoardPieces[player].splice(pieceIndex, 1);
             }
             newBoard.grid[move.to.row][move.to.col].push(move.piece);
-        } else if (move.type === 'move' && move.from) {
+        } else if (move.type === 'mover' && move.from) {
             const pieceToMove = newBoard.grid[move.from.row][move.from.col].pop();
             if (pieceToMove) {
                 newBoard.grid[move.to.row][move.to.col].push(pieceToMove);
@@ -94,53 +94,21 @@ export class Board {
     public checkWinner(): Player | null {
         const lines = [
             // Horizontais
-            [
-                [0, 0],
-                [0, 1],
-                [0, 2],
-            ],
-            [
-                [1, 0],
-                [1, 1],
-                [1, 2],
-            ],
-            [
-                [2, 0],
-                [2, 1],
-                [2, 2],
-            ],
+            [[0, 0], [0, 1], [0, 2]],
+            [[1, 0], [1, 1], [1, 2]],
+            [[2, 0], [2, 1], [2, 2]],
             // Verticais
-            [
-                [0, 0],
-                [1, 0],
-                [2, 0],
-            ],
-            [
-                [0, 1],
-                [1, 1],
-                [2, 1],
-            ],
-            [
-                [0, 2],
-                [1, 2],
-                [2, 2],
-            ],
+            [[0, 0], [1, 0], [2, 0]],
+            [[0, 1], [1, 1], [2, 1]],
+            [[0, 2], [1, 2], [2, 2]],
             // Diagonais
-            [
-                [0, 0],
-                [1, 1],
-                [2, 2],
-            ],
-            [
-                [0, 2],
-                [1, 1],
-                [2, 0],
-            ],
+            [[0, 0], [1, 1], [2, 2]],
+            [[0, 2], [1, 1], [2, 0]],
         ];
 
         for (const line of lines) {
             const pieces = line.map(([r, c]) => this.getTopPiece(r, c));
-            if (pieces.every((p) => p && p.owner === pieces[0]?.owner)) {
+            if (pieces[0] && pieces.every((p) => p && p.owner === pieces[0]?.owner)) {
                 return pieces[0]?.owner || null;
             }
         }

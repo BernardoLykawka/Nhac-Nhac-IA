@@ -38,7 +38,7 @@ function negamax(
 
     for (const move of validMoves) {
         const newBoard = board.applyMove(move);
-        const nextPlayer = currentPlayer === Player.Orange ? Player.Blue : Player.Orange;
+        const nextPlayer = currentPlayer === Player.Laranja ? Player.Azul : Player.Laranja;
 
         const result = negamax(newBoard, depth - 1, -beta, -alpha, nextPlayer, perspectivePlayer);
         const currentScore = -result.score;

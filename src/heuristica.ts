@@ -2,7 +2,7 @@ import { Board } from './tabuleiro';
 import { Player, PieceSize } from './interfaces';
 
 const WIN_SCORE = 10000;
-const TWO_IN_A_ROW_SCORE = 100;
+const TWO_IN_A_ROW_SCORE = 150;
 const ONE_IN_A_ROW_SCORE = 10;
 const CENTER_CONTROL_SCORE = 25;
 const CORNER_CONTROL_SCORE = 15;
@@ -11,11 +11,11 @@ const PIECE_POWER_MULTIPLIER = {
     [PieceSize.Medium]: 4,
     [PieceSize.Small]: 1,
 };
-const TRAPPED_PIECE_BONUS = 20;
-const REVEAL_THREAT_PENALTY = -200;
+const TRAPPED_PIECE_BONUS = 35;
+const REVEAL_THREAT_PENALTY = -800;
 
 export function evaluateBoard(board: Board, perspectivePlayer: Player): number {
-    const opponent = perspectivePlayer === Player.Orange ? Player.Blue : Player.Orange;
+    const opponent = perspectivePlayer === Player.Laranja ? Player.Azul : Player.Laranja;
     const winner = board.checkWinner();
     if (winner) {
         return winner === perspectivePlayer ? WIN_SCORE : -WIN_SCORE;
@@ -135,7 +135,7 @@ function evaluateHiddenState(board: Board, player: Player, opponent: Player): nu
 
 function countThreats(board: Board, player: Player): number {
     let threats = 0;
-    const opponent = player === Player.Orange ? Player.Blue : Player.Orange;
+    const opponent = player === Player.Laranja ? Player.Azul : Player.Laranja;
     const lines = [
         [[0, 0], [0, 1], [0, 2]],
         [[1, 0], [1, 1], [1, 2]],

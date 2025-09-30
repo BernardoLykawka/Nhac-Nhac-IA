@@ -11,9 +11,9 @@ export class GameController {
 
     constructor() {
         this.board = new Board();
-        this.currentPlayer = Player.Orange;
-        this.humanPlayer = Player.Orange;
-        this.aiPlayer = Player.Blue;
+        this.currentPlayer = Player.Laranja;
+        this.humanPlayer = Player.Laranja;
+        this.aiPlayer = Player.Azul;
     }
 
     public async startGame() {
@@ -41,7 +41,7 @@ export class GameController {
                 break;
             }
 
-            this.currentPlayer = (this.currentPlayer === Player.Orange) ? Player.Blue : Player.Orange;
+            this.currentPlayer = (this.currentPlayer === Player.Laranja) ? Player.Azul : Player.Laranja;
         }
 
         this.printBoard();
@@ -53,13 +53,13 @@ export class GameController {
     }
 
     private setupPlayers() {
-        const humanColor = readlineSync.question('Você quer ser Laranja (O) ou Azul (B)? ').toUpperCase();
-        if (humanColor === 'B' || humanColor === 'AZUL') {
-            this.humanPlayer = Player.Blue;
-            this.aiPlayer = Player.Orange;
+        const humanColor = readlineSync.question('Você quer ser Laranja (L) ou Azul (A)? ').toUpperCase();
+        if (humanColor === 'A' || humanColor === 'AZUL') {
+            this.humanPlayer = Player.Azul;
+            this.aiPlayer = Player.Laranja;
         } else {
-            this.humanPlayer = Player.Orange;
-            this.aiPlayer = Player.Blue;
+            this.humanPlayer = Player.Laranja;
+            this.aiPlayer = Player.Azul;
         }
 
         const whoStarts = readlineSync.question('Quem começa? (H)umano ou (I)A? ').toUpperCase();
@@ -69,7 +69,7 @@ export class GameController {
     private getHumanMove(): Move {
         const validMoves = this.board.getValidMoves(this.humanPlayer);
         while (true) {
-            const input = readlineSync.question(`Sua jogada (ex: 'place L at A2' ou 'move A1 to C3'): `).toLowerCase();
+            const input = readlineSync.question(`Sua jogada (ex: 'colocar G em A2' ou 'mover A1 para C3'): `).toLowerCase();
             const move = this.parseMove(input, validMoves);
             if (move) {
                 return move;
@@ -79,15 +79,15 @@ export class GameController {
     }
 
     private parseMove(input: string, validMoves: Move[]): Move | null {
-        const placeRegex = /place\s+([sml])\s+at\s+([a-c])([1-3])/;
-        const moveRegex = /move\s+([a-c])([1-3])\s+to\s+([a-c])([1-3])/;
+        const placeRegex = /colocar\s+([gmp])\s+em\s+([a-c])([1-3])/;
+        const moveRegex = /mover\s+([a-c])([1-3])\s+para\s+([a-c])([1-3])/;
 
         const placeMatch = input.match(placeRegex);
         if (placeMatch) {
             const size = this.parseSize(placeMatch[1]);
             const to = this.parseCoords(placeMatch[2], placeMatch[3]);
             return validMoves.find(m =>
-                m.type === 'place' &&
+                m.type === 'colocar' &&
                 m.piece.size === size &&
                 m.to.row === to.row && m.to.col === to.col
             ) || null;
@@ -98,7 +98,7 @@ export class GameController {
             const from = this.parseCoords(moveMatch[1], moveMatch[2]);
             const to = this.parseCoords(moveMatch[3], moveMatch[4]);
             return validMoves.find(m =>
-                m.type === 'move' &&
+                m.type === 'mover' &&
                 m.from?.row === from.row && m.from?.col === from.col &&
                 m.to.row === to.row && m.to.col === to.col
             ) || null;
@@ -108,9 +108,9 @@ export class GameController {
     }
 
     private parseSize(s: string): PieceSize {
-        if (s === 's') return PieceSize.Small;
+        if (s === 'p') return PieceSize.Small;
         if (s === 'm') return PieceSize.Medium;
-        return PieceSize.Large;
+        return PieceSize.Large; // g
     }
 
     private parseCoords(colStr: string, rowStr: string): { row: number; col: number } {
@@ -124,11 +124,11 @@ export class GameController {
     }
 
     private colorize(text: string, player: Player): string {
-        const orange = '\x1b[38;5;208m'; // Código para laranja
-        const blue = '\x1b[34m';         // Código para azul
+        const orange = '\x1b[38;5;208m'; // Código ANSI para laranja
+        const blue = '\x1b[34m';         // Código ANSI para azul
         const reset = '\x1b[0m';         // Reseta a cor
 
-        if (player === Player.Orange) {
+        if (player === Player.Laranja) {
             return `${orange}${text}${reset}`;
         } else {
             return `${blue}${text}${reset}`;
@@ -138,14 +138,14 @@ export class GameController {
     private logMove(move: Move) {
         const player = move.piece.owner;
         const sizeChar = {
-            [PieceSize.Small]: 'S',
+            [PieceSize.Small]: 'P',
             [PieceSize.Medium]: 'M',
-            [PieceSize.Large]: 'L'
+            [PieceSize.Large]: 'G'
         }[move.piece.size];
         const toCoords = this.formatCoords(move.to.row, move.to.col);
         const coloredPlayer = this.colorize(player, player);
 
-        if (move.type === 'place') {
+        if (move.type === 'colocar') {
             console.log(`> ${coloredPlayer} colocou uma peça ${sizeChar} em ${toCoords}.`);
         } else if (move.from) {
             const fromCoords = this.formatCoords(move.from.row, move.from.col);
@@ -155,16 +155,16 @@ export class GameController {
 
     private printBoard() {
         console.log("\nPeças disponíveis:");
-        for (const player of [Player.Orange, Player.Blue]) {
+        for (const player of [Player.Laranja, Player.Azul]) {
             const pieces = this.board.offBoardPieces[player];
-            const counts = { S: 0, M: 0, L: 0 };
+            const counts = { P: 0, M: 0, G: 0 };
             pieces.forEach((p: Piece) => {
-                if (p.size === PieceSize.Small) counts.S++;
+                if (p.size === PieceSize.Small) counts.P++;
                 else if (p.size === PieceSize.Medium) counts.M++;
-                else counts.L++;
+                else counts.G++;
             });
             const coloredPlayer = this.colorize(player, player)
-            console.log(`${coloredPlayer}: S(${counts.S}), M(${counts.M}), L(${counts.L})`);
+            console.log(`${coloredPlayer}: P(${counts.P}), M(${counts.M}), G(${counts.G})`);
         }
 
         console.log("\n  A   B   C");
@@ -174,9 +174,9 @@ export class GameController {
                 const piece = this.board.getTopPiece(r, c);
                 if (piece) {
                     const sizeChar = {
-                        [PieceSize.Small]: 'S',
+                        [PieceSize.Small]: 'P',
                         [PieceSize.Medium]: 'M',
-                        [PieceSize.Large]: 'L'
+                        [PieceSize.Large]: 'G'
                     }[piece.size];
                     const textToColor = `[${sizeChar}]`;
                     const coloredPiece = this.colorize(textToColor, piece.owner)
