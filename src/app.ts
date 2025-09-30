@@ -17,13 +17,13 @@ export class GameController {
     }
 
     public async startGame() {
-        console.log("Bem-vindo ao Nhac Nhac!");
+        console.log("====================== Bem-vindo ao Nhac Nhac! ======================"); // Limpa o console
         this.setupPlayers();
 
         while (!this.board.checkWinner()) {
             this.printBoard();
             const coloredPlayer = this.colorize(this.currentPlayer, this.currentPlayer);
-            console.log(`\n--- Turno do jogador: ${coloredPlayer} ---`);
+            console.log(`\n================ Turno do jogador: ${coloredPlayer} ================`);
 
 
             let move: Move | null = null;

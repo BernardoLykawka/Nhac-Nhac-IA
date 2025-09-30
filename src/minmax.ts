@@ -2,7 +2,7 @@ import { Board } from './tabuleiro';
 import { Move, Player } from './interfaces';
 import { evaluateBoard } from './heuristica';
 
-const MAX_DEPTH = 5; // Profundidade da busca Minimax
+const MAX_DEPTH = 6; // Profundidade da busca Minimax
 
 export function findBestMove(board: Board, player: Player): Move | null {
     console.log(`\nIA (${player}) está pensando com profundidade ${MAX_DEPTH}...`);
