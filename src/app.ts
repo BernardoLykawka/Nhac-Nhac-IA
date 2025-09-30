@@ -79,8 +79,8 @@ export class GameController {
     }
 
     private parseMove(input: string, validMoves: Move[]): Move | null {
-        const placeRegex = /colocar\s+([gmp])\s+em\s+([a-c])([1-3])/;
-        const moveRegex = /mover\s+([a-c])([1-3])\s+para\s+([a-c])([1-3])/;
+        const placeRegex = /colocar\s+([gmp])\s+em\s+([a-c])([1-3])/; //regex para o mano não colocar errado
+        const moveRegex = /mover\s+([a-c])([1-3])\s+para\s+([a-c])([1-3])/;  //regex para o mano não mover errado
 
         const placeMatch = input.match(placeRegex);
         if (placeMatch) {
@@ -110,7 +110,7 @@ export class GameController {
     private parseSize(s: string): PieceSize {
         if (s === 'p') return PieceSize.Small;
         if (s === 'm') return PieceSize.Medium;
-        return PieceSize.Large; // g
+        return PieceSize.Large;
     }
 
     private parseCoords(colStr: string, rowStr: string): { row: number; col: number } {
@@ -124,8 +124,8 @@ export class GameController {
     }
 
     private colorize(text: string, player: Player): string {
-        const orange = '\x1b[38;5;208m'; // Código ANSI para laranja
-        const blue = '\x1b[34m';         // Código ANSI para azul
+        const orange = '\x1b[38;5;208m'; // Código para pintar de laranja
+        const blue = '\x1b[34m';         // Código para pintar de azul
         const reset = '\x1b[0m';         // Reseta a cor
 
         if (player === Player.Laranja) {

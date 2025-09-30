@@ -32,7 +32,7 @@ export class Board {
     public getValidMoves(player: Player): Move[] {
         const moves: Move[] = [];
 
-        // 1. Movimentos de posicionar peças de fora do tabuleiro
+        // movimento colocar no noard
         const uniqueOffBoardPieces = this.getUniquePieces(this.offBoardPieces[player]);
         for (const piece of uniqueOffBoardPieces) {
             for (let r = 0; r < 3; r++) {
@@ -45,7 +45,7 @@ export class Board {
             }
         }
 
-        // 2. Movimentos de deslocar peças já no tabuleiro
+        // movimento de mover no board
         for (let r = 0; r < 3; r++) {
             for (let c = 0; c < 3; c++) {
                 const topPiece = this.getTopPiece(r, c);

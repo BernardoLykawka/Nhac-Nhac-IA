@@ -8,7 +8,7 @@ export function findBestMove(board: Board, player: Player): Move | null {
     console.log(`\nIA (${player}) está pensando com profundidade ${MAX_DEPTH}...`);
     const startTime = Date.now();
 
-    const { move } = negamax(board, MAX_DEPTH, -Infinity, Infinity, player, player);
+    const { move } = minmax(board, MAX_DEPTH, -Infinity, Infinity, player, player);
 
     const endTime = Date.now();
     console.log(`IA decidiu em ${(endTime - startTime) / 1000} segundos.`);
@@ -16,7 +16,7 @@ export function findBestMove(board: Board, player: Player): Move | null {
     return move;
 }
 
-function negamax(
+function minmax(
     board: Board,
     depth: number,
     alpha: number,
@@ -40,7 +40,7 @@ function negamax(
         const newBoard = board.applyMove(move);
         const nextPlayer = currentPlayer === Player.Laranja ? Player.Azul : Player.Laranja;
 
-        const result = negamax(newBoard, depth - 1, -beta, -alpha, nextPlayer, perspectivePlayer);
+        const result = minmax(newBoard, depth - 1, -beta, -alpha, nextPlayer, perspectivePlayer);
         const currentScore = -result.score;
 
         if (currentScore > bestScore) {
