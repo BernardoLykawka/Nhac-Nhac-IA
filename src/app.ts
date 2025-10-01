@@ -1,6 +1,3 @@
-// Nenhuma mudança necessária na classe Board ou nas interfaces.
-// Cole esta classe GameController no lugar da sua.
-
 import { Board } from './tabuleiro';
 import { Player, Piece, PieceSize, Move } from './interfaces';
 import { findBestMove } from './minmax';
