@@ -1,3 +1,6 @@
+// Nenhuma mudança necessária na classe Board ou nas interfaces.
+// Cole esta classe GameController no lugar da sua.
+
 import { Board } from './tabuleiro';
 import { Player, Piece, PieceSize, Move } from './interfaces';
 import { findBestMove } from './minmax';
@@ -17,14 +20,13 @@ export class GameController {
     }
 
     public async startGame() {
-        console.log("====================== Bem-vindo ao Nhac Nhac! ======================"); // Limpa o console
+        console.log("====================== Bem-vindo ao Nhac Nhac! ======================");
         this.setupPlayers();
 
         while (!this.board.checkWinner()) {
             this.printBoard();
             const coloredPlayer = this.colorize(this.currentPlayer, this.currentPlayer);
             console.log(`\n================ Turno do jogador: ${coloredPlayer} ================`);
-
 
             let move: Move | null = null;
             if (this.currentPlayer === this.humanPlayer) {
@@ -69,7 +71,7 @@ export class GameController {
     private getHumanMove(): Move {
         const validMoves = this.board.getValidMoves(this.humanPlayer);
         while (true) {
-            const input = readlineSync.question(`Sua jogada (ex: 'colocar G em A2' ou 'mover A1 para C3'): `).toLowerCase();
+            const input = readlineSync.question(`Sua jogada (ex: 'G em A2' ou 'A1 para C3'): `).toLowerCase();
             const move = this.parseMove(input, validMoves);
             if (move) {
                 return move;
@@ -79,8 +81,8 @@ export class GameController {
     }
 
     private parseMove(input: string, validMoves: Move[]): Move | null {
-        const placeRegex = /colocar\s+([gmp])\s+em\s+([a-c])([1-3])/; //regex para o mano não colocar errado
-        const moveRegex = /mover\s+([a-c])([1-3])\s+para\s+([a-c])([1-3])/;  //regex para o mano não mover errado
+        const placeRegex = /^([gmp])\s+em\s+([a-c])([1-3])$/; 
+        const moveRegex = /^([a-c])([1-3])\s+para\s+([a-c])([1-3])$/; 
 
         const placeMatch = input.match(placeRegex);
         if (placeMatch) {
@@ -124,9 +126,9 @@ export class GameController {
     }
 
     private colorize(text: string, player: Player): string {
-        const orange = '\x1b[38;5;208m'; // Código para pintar de laranja
-        const blue = '\x1b[34m';         // Código para pintar de azul
-        const reset = '\x1b[0m';         // Reseta a cor
+        const orange = '\x1b[38;5;208m';
+        const blue = '\x1b[34m';      
+        const reset = '\x1b[0m';      
 
         if (player === Player.Laranja) {
             return `${orange}${text}${reset}`;
@@ -167,9 +169,9 @@ export class GameController {
             console.log(`${coloredPlayer}: P(${counts.P}), M(${counts.M}), G(${counts.G})`);
         }
 
-        console.log("\n  A   B   C");
+        console.log("\n   A   B   C");
         for (let r = 0; r < 3; r++) {
-            let rowStr = `${r + 1} `;
+            let rowStr = ` ${r + 1} `;
             for (let c = 0; c < 3; c++) {
                 const piece = this.board.getTopPiece(r, c);
                 if (piece) {
