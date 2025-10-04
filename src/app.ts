@@ -17,7 +17,7 @@ export class GameController {
     }
 
     public async startGame() {
-        console.log("====================== Bem-vindo ao Nhac Nhac! ======================"); // Limpa o console
+        console.log("====================== Bem-vindo ao Nhac Nhac! ======================"); 
         this.setupPlayers();
 
         while (!this.board.checkWinner()) {
