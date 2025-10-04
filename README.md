@@ -15,7 +15,6 @@ Implementação de um agente de IA para o jogo Nhac Nhac utilizando o algoritmo 
 
 ```
 npm install
-
 ```
 
 ## Execução
