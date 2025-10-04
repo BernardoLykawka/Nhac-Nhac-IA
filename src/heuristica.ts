@@ -1,11 +1,11 @@
 import { Board } from './tabuleiro';
 import { Player, PieceSize } from './interfaces';
 
-const WIN_SCORE = 10000;
-const TWO_IN_A_ROW_SCORE = 150;
+const WIN_SCORE = 100000;
+const TWO_IN_A_ROW_SCORE = 200;
 const ONE_IN_A_ROW_SCORE = 10;
-const CENTER_CONTROL_SCORE = 25;
-const CORNER_CONTROL_SCORE = 15;
+const CENTER_CONTROL_SCORE = 30;
+const CORNER_CONTROL_SCORE = 50;
 const PIECE_POWER_MULTIPLIER = {
     [PieceSize.Large]: 9,
     [PieceSize.Medium]: 4,
@@ -110,16 +110,16 @@ function evaluateHiddenState(board: Board, player: Player, opponent: Player): nu
                 const topPiece = stack[stack.length - 1];
                 const hiddenPiece = stack[stack.length - 2];
 
-                // Cenário Positivo: Aprisionando peça do oponente
+                // cenario positvoo: aprsiona peca do oponente
                 if (topPiece.owner === player && hiddenPiece.owner === opponent) {
                     hiddenStateScore += TRAPPED_PIECE_BONUS;
                 }
-                // Cenário Negativo: Risco de revelar uma ameaça do oponente
+                // cenario ruim: revelar uma ameaça do oponente
                 if (topPiece.owner === player && hiddenPiece.owner === opponent) {
                     const tempBoard = board.clone();
                     tempBoard.grid[r][c].pop(); // Simula a revelação
                     if (tempBoard.checkWinner() === opponent) {
-                        hiddenStateScore += REVEAL_THREAT_PENALTY * 10; // Penalidade máxima
+                        hiddenStateScore += REVEAL_THREAT_PENALTY * 10; // penalidade
                     } else {
                         const opponentThreats = countThreats(tempBoard, opponent);
                         if (opponentThreats > 0) {
